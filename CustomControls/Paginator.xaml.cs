@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -57,7 +58,6 @@ namespace CustomControls
                 OnPropertyChanged("Pages");
             }
         }
-
         public IEnumerable<int> Pages
         {
             get
@@ -127,7 +127,9 @@ namespace CustomControls
 
         private void ClickOnPage(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            CurrentPage = Convert.ToInt32(((ListViewItem)sender).Content);
+            var send = (ListViewItem)sender;
+            CurrentPage = Convert.ToInt32(send.Content);
+
         }
     }
 }

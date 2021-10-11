@@ -36,8 +36,8 @@
                 <Setter.Value>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalAlignment" Value="Center"/>
-
                         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ClickOnPage"/>
+                        
                     </Style>
                 </Setter.Value>
             </Setter>
