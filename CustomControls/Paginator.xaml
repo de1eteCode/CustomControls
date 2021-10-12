@@ -10,6 +10,7 @@
              DataContext="{Binding ElementName=_this}">
 
     <UserControl.Resources>
+
         <Style x:Key="ControlButton" TargetType="{x:Type Button}">
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -31,16 +32,8 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="1"/>
-
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ClickOnPage"/>
-                        
-                    </Style>
-                </Setter.Value>
-            </Setter>
+            
+            
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
@@ -48,14 +41,47 @@
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
+
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ClickOnPage"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
+
+        <Style x:Key="SelectedTextBlock" TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="#e0e0e0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+        </Style>
+        
     </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal">
         <Button Click="GoFirst" Style="{StaticResource ControlButton}" Content="≪"/>
         <Button Click="GoPrevious" Style="{StaticResource ControlButton}" Content="&lt;"/>
 
-        <ListView Style="{StaticResource list}" ItemsSource="{Binding Pages}"/>
+        <ListView x:Name="listView" Style="{StaticResource list}" ItemsSource="{Binding Pages}">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:PageRecord}">
+                    <TextBlock x:Name="txtNumber" Text="{Binding Number}" Style="{StaticResource TextBlock}"/>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                            <Setter TargetName="txtNumber" Property="Style" Value="{StaticResource SelectedTextBlock}"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
         <Button Click="GoNext" Style="{StaticResource ControlButton}" Content="&gt;"/>
         <Button Click="GoLast" Style="{StaticResource ControlButton}" Content="≫"/>

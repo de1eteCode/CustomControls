@@ -13,7 +13,7 @@
     <Grid>
 
         <Label HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Content="{Binding ElementName=pag, Path=CurrentPage}"/>
-        <CustomControls:Paginator x:Name="pag" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" MaxPage="12" Range="2"/>
+        <CustomControls:Paginator x:Name="pag" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" MaxPage="30000000" Range="2"/>
 
 
     </Grid>

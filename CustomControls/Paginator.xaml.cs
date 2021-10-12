@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace CustomControls
 {
@@ -58,7 +61,7 @@ namespace CustomControls
                 OnPropertyChanged("Pages");
             }
         }
-        public IEnumerable<int> Pages
+        public IEnumerable<PageRecord> Pages
         {
             get
             {
@@ -90,7 +93,7 @@ namespace CustomControls
 
                 for (int page = start; page <= end && page <= MaxPage; page++)
                 {
-                    yield return page;
+                    yield return new PageRecord(page, page == CurrentPage);
                 }
             }
         }
@@ -128,8 +131,19 @@ namespace CustomControls
         private void ClickOnPage(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var send = (ListViewItem)sender;
-            CurrentPage = Convert.ToInt32(send.Content);
+            CurrentPage = ((PageRecord)send.Content).Number;
+        }
+    }
 
+    public record PageRecord
+    {
+        public int Number { get; private set; }
+        public bool IsSelected { get; private set; }
+
+        public PageRecord(int number, bool isSelected)
+        {
+            Number = number;
+            IsSelected = isSelected;
         }
     }
 }
