@@ -32,8 +32,6 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="1"/>
-            
-            
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
@@ -41,24 +39,29 @@
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
-
             <Setter Property="ItemContainerStyle">
                 <Setter.Value>
                     <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <ContentPresenter Margin="1,0"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                         <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ClickOnPage"/>
                     </Style>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <Style x:Key="SelectedTextBlock" TargetType="{x:Type TextBlock}">
+        <Style x:Key="SelectedListBoxItem" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Background" Value="#e0e0e0"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
         </Style>
 
-        <Style x:Key="TextBlock" TargetType="{x:Type TextBlock}">
+        <Style x:Key="ListBoxItem" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -73,10 +76,10 @@
         <ListView x:Name="listView" Style="{StaticResource list}" ItemsSource="{Binding Pages}">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type local:PageRecord}">
-                    <TextBlock x:Name="txtNumber" Text="{Binding Number}" Style="{StaticResource TextBlock}"/>
+                    <ListBoxItem x:Name="txtNumber" Content="{Binding Number}" Style="{StaticResource ListBoxItem}"/>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                            <Setter TargetName="txtNumber" Property="Style" Value="{StaticResource SelectedTextBlock}"/>
+                            <Setter TargetName="txtNumber" Property="Style" Value="{StaticResource SelectedListBoxItem}"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
