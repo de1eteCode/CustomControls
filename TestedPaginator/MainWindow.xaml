@@ -1,4 +1,5 @@
 ﻿<Window
+        x:Name="_this"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,14 +7,16 @@
         xmlns:local="clr-namespace:TestedPaginator"
         xmlns:CustomControls="clr-namespace:CustomControls;assembly=CustomControls"
         x:Class="TestedPaginator.MainWindow"
+        DataContext="{Binding ElementName=_this}"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450" Width="800">
 
     <Grid>
 
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center" Content="Add page" Click="Button_Click"/>
         <Label HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Content="{Binding ElementName=pag, Path=CurrentPage}"/>
-        <CustomControls:Paginator x:Name="pag" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" MaxPage="30000000" Range="2"/>
+        <CustomControls:Paginator x:Name="pag" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" MaxPage="{Binding ElementName=_this, Path=MaxPage}"/>
 
 
     </Grid>

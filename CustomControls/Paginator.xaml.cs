@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace CustomControls
 {
@@ -11,20 +12,23 @@ namespace CustomControls
     /// </summary>
     public partial class Paginator : UserControl, INotifyPropertyChanged
     {
+        public static readonly DependencyProperty RangeProperty =
+            DependencyProperty.Register(nameof(Range), typeof(int), typeof(Paginator),
+                new FrameworkPropertyMetadata(2, FrameworkPropertyMetadataOptions.Inherits, OnCustomPropertyValueChangedCallback, null, false, UpdateSourceTrigger.PropertyChanged));
+
+        public static readonly DependencyProperty CurrentPageProperty =
+            DependencyProperty.Register(nameof(CurrentPage), typeof(int), typeof(Paginator),
+                new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.Inherits, OnCustomPropertyValueChangedCallback, null, false, UpdateSourceTrigger.PropertyChanged));
+
+        public static readonly DependencyProperty MinPageProperty =
+            DependencyProperty.Register(nameof(MinPage), typeof(int), typeof(Paginator),
+                new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.Inherits, OnCustomPropertyValueChangedCallback, null, false, UpdateSourceTrigger.PropertyChanged));
+
+        public static readonly DependencyProperty MaxPageProperty =
+            DependencyProperty.Register(nameof(MaxPage), typeof(int), typeof(Paginator),
+                new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.Inherits, OnCustomPropertyValueChangedCallback, null, false, UpdateSourceTrigger.PropertyChanged));
+
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        public static readonly DependencyProperty RangeProperty;
-        public static readonly DependencyProperty CurrentPageProperty;
-        public static readonly DependencyProperty MinPageProperty;
-        public static readonly DependencyProperty MaxPageProperty;
-
-        static Paginator()
-        {
-            RangeProperty = DependencyProperty.Register(nameof(Range), typeof(int), typeof(Paginator), new PropertyMetadata(2));
-            CurrentPageProperty = DependencyProperty.Register(nameof(CurrentPage), typeof(int), typeof(Paginator), new PropertyMetadata(1));
-            MinPageProperty = DependencyProperty.Register(nameof(MinPageProperty), typeof(int), typeof(Paginator), new PropertyMetadata(1));
-            MaxPageProperty = DependencyProperty.Register(nameof(MaxPageProperty), typeof(int), typeof(Paginator), new PropertyMetadata(1));
-        }
 
         public Paginator()
         {
@@ -39,11 +43,7 @@ namespace CustomControls
         public int Range
         {
             get => (int)GetValue(RangeProperty);
-            set
-            {
-                SetValue(RangeProperty, value);
-                OnPropertyChanged("Pages");
-            }
+            set => SetValue(RangeProperty, value);
         }
 
         /// <summary>
@@ -52,11 +52,7 @@ namespace CustomControls
         public int MinPage
         {
             get => (int)GetValue(MinPageProperty);
-            set
-            {
-                SetValue(MinPageProperty, value);
-                OnPropertyChanged("Pages");
-            }
+            set => SetValue(MinPageProperty, value);
         }
 
         /// <summary>
@@ -65,11 +61,7 @@ namespace CustomControls
         public int MaxPage
         {
             get => (int)GetValue(MaxPageProperty);
-            set
-            {
-                SetValue(MaxPageProperty, value);
-                OnPropertyChanged("Pages");
-            }
+            set => SetValue(MaxPageProperty, value);
         }
 
         /// <summary>
@@ -78,11 +70,7 @@ namespace CustomControls
         public int CurrentPage
         {
             get => (int)GetValue(CurrentPageProperty);
-            private set
-            {
-                SetValue(CurrentPageProperty, value);
-                OnPropertyChanged("Pages");
-            }
+            private set => SetValue(CurrentPageProperty, value);
         }
 
         /// <summary>
@@ -93,9 +81,8 @@ namespace CustomControls
         {
             get
             {
-
-                var start = 1;
-                var end = 1;
+                int start;
+                int end;
                 var min = MinPage + Range;
                 var max = MaxPage - Range;
 
@@ -153,10 +140,6 @@ namespace CustomControls
 
         #endregion
         #region Events
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         /// <summary>
         /// Обработчик кликов по страницам в ListView
@@ -169,8 +152,24 @@ namespace CustomControls
             CurrentPage = ((PageRecord)send.Content).Number;
         }
 
-        #endregion
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
+        /// <summary>
+        /// Обработчик обновления новых данных от DP, для обновления коллекции страниц для отображения
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void OnCustomPropertyValueChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Paginator pag)
+            {
+                pag.OnPropertyChanged(nameof(pag.Pages));
+            }
+        }
+        #endregion
     }
 
     public record PageRecord
